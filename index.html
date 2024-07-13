@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site com Áudio e Vídeo em Loop</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .controls {
+            position: absolute;
+            top: 2vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        button {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .controls {
+                top: 5vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background">
+        <video id="background-video" autoplay muted loop>
+            <source src="assets/video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="controls">
+        <button id="start">Início</button>
+        <button id="play-pause">Pause/Play</button>
+        <button id="rewind">Voltar 5s</button>
+        <button id="forward">Adiantar 5s</button>
+    </div>
+    <audio id="background-audio" src="assets/audio.mp3" autoplay loop></audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const audio = document.getElementById('background-audio');
+            const video = document.getElementById('background-video');
+            const playPauseButton = document.getElementById('play-pause');
+            const startButton = document.getElementById('start');
+            const rewindButton = document.getElementById('rewind');
+            const forwardButton = document.getElementById('forward');
+
+            // Definir texto inicial do botão Pause/Play com base no estado inicial do áudio
+            if (audio.paused) {
+                playPauseButton.textContent = 'Play';
+            } else {
+                playPauseButton.textContent = 'Pause';
+            }
+
+            playPauseButton.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    playPauseButton.textContent = 'Pause';
+                } else {
+                    audio.pause();
+                    playPauseButton.textContent = 'Play';
+                }
+            });
+
+            startButton.addEventListener('click', () => {
+                audio.currentTime = 0;
+                if (audio.paused) {
+                    audio.play();
+                    playPauseButton.textContent = 'Pause';
+                }
+            });
+
+            rewindButton.addEventListener('click', () => {
+                audio.currentTime -= 5;
+            });
+
+            forwardButton.addEventListener('click', () => {
+                audio.currentTime += 5;
+            });
+
+            audio.addEventListener('ended', () => {
+                audio.currentTime = 0;
+                audio.play();
+            });
+        });
+    </script>
+</body>
+</html>
